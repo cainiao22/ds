@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qding.bigdata.ds.hivemeta.dao.HiveMetaColumnsDao" >
+  <resultMap id="BaseResultMap" type="com.qding.bigdata.ds.model.hiveMeta.HiveColumns" >
+    <id column="CD_ID" property="cdId" jdbcType="BIGINT" />
+    <id column="COLUMN_NAME" property="columnName" jdbcType="VARCHAR" />
+    <result column="COMMENT" property="comment" jdbcType="VARCHAR" />
+    <result column="TYPE_NAME" property="typeName" jdbcType="VARCHAR" />
+    <result column="INTEGER_IDX" property="integerIdx" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    CD_ID, COLUMN_NAME, COMMENT, TYPE_NAME, INTEGER_IDX
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.qding.bigdata.ds.model.hiveMeta.HiveColumnsKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from COLUMNS_V2
+    where CD_ID = #{cdId,jdbcType=BIGINT}
+      and COLUMN_NAME = #{columnName,jdbcType=VARCHAR}
+  </select>
+  <select id="getColumnsBySdId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select
+    <include refid="Base_Column_List" />
+    from COLUMNS_V2
+    WHERE cd_id in (SELECT cd_id FROM  SDS WHERE sd_id = #{sdId})
+  </select>
+</mapper>

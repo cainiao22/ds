@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qding.bigdata.ds.dao.DataxConfigFiltDao">
+
+    <select id="queryDataBaseInfo" resultType="com.qding.bigdata.ds.model.DataxConfigFile" parameterType="com.qding.bigdata.ds.model.DataxConfigFile">
+       select c.config_value AS configValue from ds_config c where c.config_key = #{dataxConfigFile.dbNameSelect} AND config_type !='DATABASE_PARAM_TYPE'
+    </select>
+
+</mapper>

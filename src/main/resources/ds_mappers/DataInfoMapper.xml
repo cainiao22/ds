@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qding.bigdata.ds.dao.DataInfoDao">
+  <resultMap id="BaseResultMap" type="com.qding.bigdata.ds.model.DataInfoList" >
+    <result column="id" property="id" jdbcType="CHAR" />
+    <result column="metaData_type" property="metaDataType" jdbcType="VARCHAR" />
+    <result column="metaConfig_key" property="metaConfigkey" jdbcType="VARCHAR" />
+    <result column="targetData_type" property="targetDataType" jdbcType="VARCHAR" />
+    <result column="targetConfig_key" property="targetConfigkey" jdbcType="VARCHAR" />
+    <result column="tableName" property="tableName" jdbcType="VARCHAR" />
+    <result column="targetTableName" property="targetTableName" jdbcType="VARCHAR" />
+    <result column="partitioned" property="partitioned" jdbcType="VARCHAR" />
+    <result column="terminate" property="terminate" jdbcType="VARCHAR" />
+    <result column="stored" property="stored" jdbcType="VARCHAR" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="alias" property="alias" jdbcType="VARCHAR" />
+    <result column="ownerd" property="ownerd" jdbcType="VARCHAR" />
+    <result column="sql_statement" property="sqlStatement" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="where_condition">
+    <trim prefix=" where " suffixOverrides="and">
+      <if test="id != null">
+        id = #{id} and
+      </if>
+      <if test="alias != null and alias !=''">
+        (alias like '%${alias}%' ) and
+      </if>
+      <if test="tableName != null">
+        tablename = #{tableName} and
+      </if>
+      <if test="ownerd != null and ownerd !=''" >
+        ownerd = #{ownerd} and
+      </if>
+    </trim>
+  </sql>
+  <sql id="limitAndOrderBy">
+    <if test="sortAndDesc != null">
+      order by ${sortAndDesc}
+    </if>
+    limit  #{pageCount} offset #{offset}
+  </sql>
+
+  <insert id="save" parameterType="com.qding.bigdata.ds.model.DataInfoList" >
+  insert into ds_data_info (id, metaData_type, metaConfig_key, targetData_type, targetConfig_key,tableName,targetTableName, partitioned,terminate,stored,location,alias,ownerd,sql_statement,create_time) values (#{id,jdbcType=CHAR}, #{metaDataType,jdbcType=VARCHAR}, #{metaConfigkey,jdbcType=VARCHAR},#{targetDataType,jdbcType=VARCHAR}, #{targetConfigkey,jdbcType=VARCHAR}, #{tableName,jdbcType=VARCHAR},#{targetTableName,jdbcType=VARCHAR},#{partitioned,jdbcType=VARCHAR},#{terminate,jdbcType=VARCHAR}, #{stored,jdbcType=VARCHAR},#{location,jdbcType=VARCHAR}, #{alias,jdbcType=VARCHAR}, #{ownerd,jdbcType=VARCHAR},#{sqlStatement,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <select id="list" resultMap="BaseResultMap" parameterType="com.qding.bigdata.ds.model.DataInfoList">
+    select  *
+    from ds_data_info
+    <include refid="where_condition" />
+    <include refid="limitAndOrderBy" />
+  </select>
+  <select id="count" resultType="Integer" parameterType="com.qding.bigdata.ds.model.DataInfoList">
+    select count(1)
+    from ds_data_info
+    <include refid="where_condition" />
+  </select>
+  <select id="queryById" resultMap="BaseResultMap" parameterType="String">
+    select *
+    from ds_data_info
+    where id=#{id} limit 1
+  </select>
+</mapper>

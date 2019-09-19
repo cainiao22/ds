@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qding.bigdata.ds.hivemeta.dao.HiveMetaTblsDao" >
+  <resultMap id="BaseResultMap" type="com.qding.bigdata.ds.model.hiveMeta.HiveMetaTbls" >
+    <id column="TBL_ID" property="tblId" jdbcType="BIGINT" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="INTEGER" />
+    <result column="DB_ID" property="dbId" jdbcType="BIGINT" />
+    <result column="LAST_ACCESS_TIME" property="lastAccessTime" jdbcType="INTEGER" />
+    <result column="OWNER" property="owner" jdbcType="VARCHAR" />
+    <result column="RETENTION" property="retention" jdbcType="INTEGER" />
+    <result column="SD_ID" property="sdId" jdbcType="BIGINT" />
+    <result column="TBL_NAME" property="tblName" jdbcType="VARCHAR" />
+    <result column="TBL_TYPE" property="tblType" jdbcType="VARCHAR" />
+    <result column="LINK_TARGET_ID" property="linkTargetId" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.qding.bigdata.ds.model.hiveMeta.HiveMetaTblsWithBLOBs" extends="BaseResultMap" >
+    <result column="VIEW_EXPANDED_TEXT" property="viewExpandedText" jdbcType="LONGVARCHAR" />
+    <result column="VIEW_ORIGINAL_TEXT" property="viewOriginalText" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    TBL_ID, CREATE_TIME, DB_ID, LAST_ACCESS_TIME, OWNER, RETENTION, SD_ID, TBL_NAME, 
+    TBL_TYPE, LINK_TARGET_ID
+  </sql>
+  <sql id="Blob_Column_List" >
+    VIEW_EXPANDED_TEXT, VIEW_ORIGINAL_TEXT
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from TBLS
+    where TBL_ID = #{tblId,jdbcType=BIGINT}
+  </select>
+  <select id="getTable" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from TBLS
+    WHERE db_id=#{dbId} AND tbl_name = #{tableName}
+  </select>
+</mapper>

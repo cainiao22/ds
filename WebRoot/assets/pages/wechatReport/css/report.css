@@ -1,0 +1,177 @@
+/* html {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    -webkit-overflow-scrolling: touch;
+} */
+title {
+    text-align: center;
+}
+html,body {
+    height: 100%;
+    width: 100%;
+}
+.box {
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+}
+header {
+    display: flex;
+    display: -webkit-flex;
+    height: 0.43rem;
+    line-height: 0.43rem;
+    justify-content: space-between;
+    align-items: center;
+    background: #19191e;
+    color: white;
+    position: fixed;
+    width: 100%;
+}
+header span {
+    display: inline-block;
+    /* justify-content: space-between; */
+    height: 0.43rem;
+    line-height: 0.43rem;
+}
+header a {
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+    height: 0.43rem;
+    line-height: 0.43rem;
+    color: white
+}
+header .report {
+    text-align: center;
+}
+header .more {
+    /* width: 0.14rem;
+    height: 0.2rem; */
+    margin-right: 0.14rem;
+}
+article {
+    display: flex;
+    display: -webkit-flex;
+    width: 100%;
+    justify-content: space-around;
+}
+.main {
+    -webkit-overflow-scrolling: touch;
+    /* padding-top: 0.43rem; */
+}
+.yesterday{
+    display: flex;
+    display: -webkit-flex;
+    justify-content: space-between;
+    padding: 0 0.17rem;
+    height: 1rem;
+    background: #00acc1;
+    color: #f5fbfc;
+}
+.yesterday div {
+    margin-top: 0.14rem;    
+}
+.yesterday>div {
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column; 
+}
+.yesterday .time {
+    margin-top: 0.12rem;
+}
+.dataList div {
+    display: flex;
+    display: -webkit-flex;
+    justify-content: space-between;
+    background: white;
+    height: 0.5rem;
+    line-height: 0.5rem;
+    font-size: 0.15rem;
+    margin-bottom: 1px;
+    color: #999;
+    padding: 0 0.17rem;
+}
+.dataList div span i {
+    font-size: 0.2rem;
+    font-weight: 600;
+    color: black;
+}
+.newDayUp {
+    margin-top: 0.15rem;
+    display: flex;
+    display: -webkit-flex;
+    justify-content: space-between;
+    height: 1rem;
+    color: #333333;
+    background: white;
+    margin-bottom: 1px;
+}
+.newDayUp div {
+    padding: 0 0.17rem;
+}
+.newDayUp>div {
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    color: #373737;
+    margin-top: 0.12rem;
+}
+.newDayUp>div>span {
+    margin-bottom: 0.1rem;
+}
+.newDayUp>div>span .dayUp {
+    width: 0.2rem;
+    height: 0.17rem;
+    margin-left: 0.3rem;
+}
+.newDayUpData div {
+    display: flex;
+    display: -webkit-flex;
+    justify-content: space-between;
+    flex-direction: column;
+    background: white;
+    font-size: 0.15rem;
+    margin-bottom: 1px;
+    color: #999;
+}
+.newDayUpData div:hover {
+    background: #F4F4F4;
+}
+
+.newDayUpData div p {
+    padding: 0 0.17rem;
+    display: flex;
+    display: -webkit-flex;
+    justify-content: space-between;
+    margin-top: 0.13rem;
+}
+.newDayUpData .btm {
+    margin-bottom: 0.15rem;
+}
+.newDayUpData i {
+    font-size: 0.15rem;
+    color: #999;
+    font-weight: 400;
+    width: 0.7rem;
+}
+.newDayUpData .price {
+    font-size: 0.2rem;
+    font-weight: 600;
+    color: black;
+}
+.newDayUpData div p .active {
+    color: red ;
+    font-size: 0.15rem ;
+}
+.up {
+    background: url(../iconfont/iconimg/up.png) no-repeat 0.55rem ;
+    background-size: 0.2rem,0.3rem;
+    background-position: 0.555rem 0.01rem;
+}
+.down {
+    background: url(../iconfont/iconimg/down.png) no-repeat 0.55rem ;
+    background-size: 0.2rem,0.3rem;
+    background-position: 0.555rem 0.01rem;
+}
+

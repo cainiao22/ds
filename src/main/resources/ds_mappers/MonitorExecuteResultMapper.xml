@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qding.bigdata.ds.dao.MonitorExecuteResultDao">
+    <resultMap id="BaseResultMap" type="com.qding.bigdata.ds.model.MonitorExecuteResult">
+        <id column="id" jdbcType="CHAR" property="id"/>
+        <result column="meta_table_id" jdbcType="CHAR" property="metaTableId"/>
+        <result column="meta_table_name" jdbcType="VARCHAR" property="metaTableName"/>
+        <result column="table_Alias" jdbcType="VARCHAR" property="tableAlias"/>
+        <result column="db_type" jdbcType="VARCHAR" property="dbType"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="schedule_time" jdbcType="TIMESTAMP" property="scheduleTime"/>
+        <result column="current_status" jdbcType="VARCHAR" property="currentStatus"/>
+        <result column="data_date" jdbcType="VARCHAR" property="dataDate"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="owner" jdbcType="VARCHAR" property="owner"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, meta_table_id, schedule_time, current_status, data_date, create_time,
+    update_time
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ds_monitor_execute_result
+        where id = #{id,jdbcType=CHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from ds_monitor_execute_result
+    where id = #{id,jdbcType=CHAR}
+  </delete>
+    <insert id="insert" parameterType="com.qding.bigdata.ds.model.MonitorExecuteResult">
+    insert into ds_monitor_execute_result (id, meta_table_id, schedule_time,
+      current_status, data_date, create_time, 
+      update_time)
+    values (#{id}, #{metaTableId}, #{scheduleTime},
+      #{currentStatus}, #{dataDate}, #{createTime},
+      #{updateTime})
+  </insert>
+    <insert id="save" parameterType="com.qding.bigdata.ds.model.MonitorExecuteResult">
+        insert into ds_monitor_execute_result
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="metaTableId != null">
+                meta_table_id,
+            </if>
+            <if test="scheduleTime != null">
+                schedule_time,
+            </if>
+            <if test="currentStatus != null">
+                current_status,
+            </if>
+            <if test="dataDate != null">
+                data_date,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="metaTableId != null">
+                #{metaTableId},
+            </if>
+            <if test="scheduleTime != null">
+                #{scheduleTime},
+            </if>
+            <if test="currentStatus != null">
+                #{currentStatus},
+            </if>
+            <if test="dataDate != null">
+                #{dataDate},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateById" parameterType="com.qding.bigdata.ds.model.MonitorExecuteResult">
+        update ds_monitor_execute_result
+        <set>
+            <if test="metaTableId != null">
+                meta_table_id = #{metaTableId},
+            </if>
+            <if test="scheduleTime != null">
+                schedule_time = #{scheduleTime},
+            </if>
+            <if test="currentStatus != null">
+                current_status = #{currentStatus},
+            </if>
+            <if test="dataDate != null">
+                data_date = #{dataDate},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id,jdbcType=CHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.qding.bigdata.ds.model.MonitorExecuteResult">
+    update ds_monitor_execute_result
+    set meta_table_id = #{metaTableId,jdbcType=CHAR},
+      schedule_time = #{scheduleTime},
+      current_status = #{currentStatus,jdbcType=VARCHAR},
+      data_date = #{dataDate,jdbcType=VARCHAR},
+      create_time = #{createTime},
+      update_time = #{updateTime}
+    where id = #{id,jdbcType=CHAR}
+  </update>
+    <select id="list" parameterType="com.qding.bigdata.ds.model.MonitorExecuteResult" resultMap="BaseResultMap">
+        SELECT a.*, b.name as meta_table_name, b.db_type as dbType, b.type as type, b.alias as table_alias ,b.owner as owner
+        FROM ds_monitor_execute_result a, ds_meta_table b
+        <where>
+            a.meta_table_id=b.id
+            <if test="metaTableId != null">
+              AND  a.meta_table_id = #{metaTableId}
+            </if>
+            <if test="scheduleTime != null">
+                and a.schedule_time = #{scheduleTime}
+            </if>
+            <if test="currentStatus != null and currentStatus != ''">
+                and a.current_status = #{currentStatus}
+            </if>
+            <if test="dbType != null and dbType != ''">
+                and b.db_Type = #{dbType}
+            </if>
+            <if test="type != null and type != ''">
+                and b.type = #{type}
+            </if>
+            <if test="dataDate != null">
+                and a.data_date = #{dataDate}
+            </if>
+            <if test="createTime != null">
+                and a.create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and a.update_time = #{updateTime}
+            </if>
+            <if test="queryStartTime != null">
+                and a.data_date &gt;= #{queryStartTime}
+            </if>
+            <if test="queryEndTime != null">
+                and a.data_date &lt;= #{queryEndTime}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                and (b.name like '%${keyword}%' or b.alias like '%${keyword}%')
+            </if>
+            <if test="owner != null and owner != ''">
+                and b.owner = #{owner}
+            </if>
+        </where>
+        ORDER BY update_time DESC
+        <choose>
+            <when test="page != null">
+                limit #{pageCount} offset #{offset}
+            </when>
+        </choose>
+    </select>
+
+    <select id="queryCount" parameterType="com.qding.bigdata.ds.model.MonitorExecuteResult" resultType="java.lang.Integer">
+    SELECT coalesce(count(1), 0)
+    FROM ds_monitor_execute_result a, ds_meta_table b
+        <where>
+            a.meta_table_id=b.id
+            <if test="metaTableId != null">
+                AND  a.meta_table_id = #{metaTableId}
+            </if>
+            <if test="scheduleTime != null">
+                and a.schedule_time = #{scheduleTime}
+            </if>
+            <if test="currentStatus != null and currentStatus != ''">
+                and a.current_status = #{currentStatus}
+            </if>
+            <if test="dbType != null and dbType != ''">
+                and b.db_Type = #{dbType}
+            </if>
+            <if test="type != null and type != ''">
+                and b.type = #{type}
+            </if>
+            <if test="dataDate != null">
+                and a.data_date = #{dataDate}
+            </if>
+            <if test="createTime != null">
+                and a.create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and a.update_time = #{updateTime}
+            </if>
+            <if test="queryStartTime != null">
+                and a.data_date &gt;= #{queryStartTime}
+            </if>
+            <if test="queryEndTime != null">
+                and a.data_date &lt;= #{queryEndTime}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                and (b.name like '%${keyword}%' or b.alias like '%${keyword}%')
+            </if>
+            <if test="owner != null and owner != ''">
+                and b.owner = #{owner}
+            </if>
+        </where>
+    </select>
+</mapper>

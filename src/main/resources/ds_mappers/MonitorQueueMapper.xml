@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qding.bigdata.ds.dao.MonitorQueueDao" >
+  <resultMap id="BaseResultMap" type="com.qding.bigdata.ds.model.MonitorQueue" >
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="execute_result_id" jdbcType="CHAR" property="executeResultId" />
+    <result column="meta_table_id" jdbcType="CHAR" property="metaTableId" />
+    <result column="db_type" property="dbType" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="table_name" property="tableName" jdbcType="VARCHAR" />
+    <result column="monitor_name" property="monitorName" jdbcType="VARCHAR" />
+    <result column="table_alias" property="tableAlias" jdbcType="VARCHAR" />
+    <result column="value_max" property="valueMax" jdbcType="INTEGER" />
+    <result column="value_min" property="valueMin" jdbcType="INTEGER" />
+    <result column="sql" property="sql" jdbcType="VARCHAR" />
+    <result column="schedule_time" property="scheduleTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="currentStatus" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="job_unique_id" property="jobUniqueId" jdbcType="VARCHAR" />
+    <result column="monitor_job_id" property="monitorJobId" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="priority" property="priority" jdbcType="INTEGER" />
+    <result column="data_date" property="dataDate" jdbcType="DATE" />
+  </resultMap>
+
+  <resultMap id="SecondResultMap" type="com.qding.bigdata.ds.model.MonitorJobQueue">
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="execute_result_id" jdbcType="CHAR" property="executeResultId" />
+    <result column="meta_table_id" jdbcType="CHAR" property="metaTableId" />
+    <result column="table_name" property="tableName" jdbcType="VARCHAR" />
+    <result column="table_alias" property="tableAlias" jdbcType="VARCHAR" />
+    <result column="monitor_job_id" property="monitorJobId" jdbcType="VARCHAR" />
+    <result column="db_type" property="dbType" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="schedule_time" property="scheduleTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="sql" property="sql" jdbcType="VARCHAR" />
+    <result column="job_unique_id" property="jobUniqueId" jdbcType="VARCHAR" />
+    <result column="data_date" property="dataDate" jdbcType="DATE" />
+    <result column="hash_code" property="hashCode" jdbcType="INTEGER" />
+  </resultMap>
+  <insert id="insertSelective" parameterType="com.qding.bigdata.ds.model.MonitorQueue" >
+    insert into ds_monitor_queue
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="tableName != null" >
+        table_name,
+      </if>
+      <if test="tableAlias != null" >
+        table_alias,
+      </if>
+      <if test="sql != null" >
+        sql,
+      </if>
+      <if test="scheduleTime != null" >
+        schedule_time,
+      </if>
+      <if test="currentStatus != null" >
+        status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="jobUniqueId != null" >
+        job_unique_id,
+      </if>
+      <if test="monitorJobId != null" >
+        monitor_job_id,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="priority != null" >
+        priority,
+      </if>
+      <if test="dataDate != null" >
+        data_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="tableName != null" >
+        #{tableName,jdbcType=VARCHAR},
+      </if>
+      <if test="tableAlias != null" >
+        #{tableAlias,jdbcType=VARCHAR},
+      </if>
+      <if test="sql != null" >
+        #{sql,jdbcType=VARCHAR},
+      </if>
+      <if test="scheduleTime != null" >
+        #{scheduleTime,jdbcType=VARCHAR},
+      </if>
+      <if test="currentStatus != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="jobUniqueId != null" >
+        #{jobUniqueId,jdbcType=VARCHAR},
+      </if>
+      <if test="monitorJobId != null" >
+        #{monitorJobId,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="priority != null" >
+        #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="dataDate != null" >
+        #{dataDate,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="list" parameterType="com.qding.bigdata.ds.model.MonitorQueue" resultMap="BaseResultMap">
+    SELECT a.*, b.value_min, b.value_max,b.monitor_name from ds_monitor_queue a, ds_meta_table_monitor b
+    <where>
+      a.monitor_job_id=b.id
+      <if test="id != null" >
+         a.id=#{id}
+      </if>
+      <if test="metaTableId != null" >
+       and a.meta_table_id=#{metaTableId}
+      </if>
+      <if test="executeResultId != null" >
+       and a.execute_result_id=#{executeResultId}
+      </if>
+      <if test="dbType != null and dbType != ''" >
+        and a.db_type=#{dbType}
+      </if>
+      <if test="type != null and type != ''" >
+        and a.type=#{type}
+      </if>
+      <if test="tableName != null and tableName != ''" >
+        and a.table_name=#{tableName}
+      </if>
+      <if test="tableAlias != null and tableAlias != ''" >
+        and a.table_alias=#{tableAlias}
+      </if>
+      <if test="sql != null" >
+        and a.sql=#{sql}
+      </if>
+      <if test="scheduleTime != null" >
+        and a.schedule_time=#{scheduleTime}
+      </if>
+      <if test="currentStatus != null" >
+        and a.status=#{currentStatus}
+      </if>
+      <if test="createTime != null" >
+        and a.create_time=#{createTime}
+      </if>
+      <if test="jobUniqueId != null" >
+        and a.job_unique_id=#{jobUniqueId}
+      </if>
+      <if test="monitorJobId != null" >
+        and a.monitor_job_id=#{monitorJobId}
+      </if>
+      <if test="updateTime != null" >
+        and a.update_time=#{updateTime}
+      </if>
+      <if test="priority != null" >
+        and a.priority=#{priority}
+      </if>
+      <if test="dataDate != null" >
+        and a.data_date=#{dataDate}
+      </if>
+      <if test="queryStartTime != null">
+        and a.data_date &gt;= #{queryStartTime}
+      </if>
+      <if test="queryEndTime != null">
+        and a.data_date &lt;= #{queryEndTime}
+      </if>
+    </where>
+    ORDER BY a.update_time DESC
+    <choose>
+      <when test="page != null">
+        limit #{pageCount} offset #{offset}
+      </when>
+    </choose>
+  </select>
+
+  <select id="queryCount" parameterType="com.qding.bigdata.ds.model.MonitorQueue" resultType="java.lang.Integer">
+    SELECT coalesce(count(1), 0) from ds_monitor_queue
+    <where>
+      <if test="id != null" >
+        id=#{id}
+      </if>
+      <if test="metaTableId != null" >
+        meta_table_id=#{metaTableId}
+      </if>
+      <if test="executeResultId != null" >
+        execute_result_id=#{executeResultId}
+      </if>
+      <if test="type != null and type != ''" >
+        and type=#{type}
+      </if>
+      <if test="tableName != null and tableName != ''" >
+        and table_name=#{tableName}
+      </if>
+      <if test="tableAlias != null and tableAlias != ''" >
+        and table_alias=#{tableAlias}
+      </if>
+      <if test="sql != null" >
+        and sql=#{sql}
+      </if>
+      <if test="scheduleTime != null" >
+        and schedule_time=#{scheduleTime}
+      </if>
+      <if test="currentStatus != null" >
+        and status=#{currentStatus}
+      </if>
+      <if test="createTime != null" >
+        and create_time=#{createTime}
+      </if>
+      <if test="jobUniqueId != null" >
+        and job_unique_id=#{jobUniqueId}
+      </if>
+      <if test="monitorJobId != null" >
+        and monitor_job_id=#{monitorJobId}
+      </if>
+      <if test="updateTime != null" >
+        and update_time=#{updateTime}
+      </if>
+      <if test="priority != null" >
+        and priority=#{priority}
+      </if>
+      <if test="dataDate != null" >
+        and data_date=#{dataDate}
+      </if>
+      <if test="queryStartTime != null">
+        and data_date &gt;= #{queryStartTime}
+      </if>
+      <if test="queryEndTime != null">
+        and data_date &lt;= #{queryEndTime}
+      </if>
+    </where>
+  </select>
+  <insert id="addMonitorJobQueue" parameterType="com.qding.bigdata.ds.model.MonitorJobQueue">
+    INSERT INTO ds_monitor_queue(
+    id,meta_table_id,monitor_job_id, db_type, `type`, `table_name`,table_alias, `sql`, schedule_time, status, create_time,job_unique_id,priority,data_date, hash_code)
+    VALUES (#{id},#{metaTableId},#{monitorJobId}, #{dbType}, #{type}, #{tableName}, #{tableAlias}, #{sql}, #{scheduleTime}, #{status}, #{createTime},#{jobUniqueId},#{priority},#{dataDate}, #{hashCode})
+
+  </insert>
+  <select id="checkJobInQueue" resultType="Integer" parameterType="com.qding.bigdata.ds.model.MonitorJobQueue">
+    select count(1)
+    from ds_monitor_queue
+    where job_unique_id=#{jobUniqueId} and status in ('Pending','Running')
+  </select>
+  <select id="listPendingQueue" resultMap="SecondResultMap" >
+    select
+    *
+    from ds_monitor_queue
+    where status='Pending' AND MOD(hash_code,#{totalCount})=#{currentIndex} order by priority desc ,schedule_time asc limit 1
+  </select>
+  <update id="updateJobStatus" parameterType="com.qding.bigdata.ds.model.MonitorJobQueue">
+    update ds_monitor_queue set status=#{status} ,update_time=#{updateTime} where id=#{id}
+  </update>
+  <select id="queryByCondition" parameterType="com.qding.bigdata.ds.model.MonitorJobQueue" resultMap="SecondResultMap">
+    SELECT *
+    from ds_monitor_queue
+    <where>
+      <if test="executeResultId != null">
+        and execute_result_id=#{executeResultId}
+      </if>
+      <if test="metaTableId != null">
+        and meta_table_id=#{metaTableId}
+      </if>
+      <if test="type != null">
+        and `type`=#{type}
+      </if>
+      <if test="tableName != null">
+        AND `table_name`=#{tableName}
+      </if>
+      <if test="dataDate != null">
+        and data_date=#{dataDate}
+      </if>
+    </where>
+    ORDER BY create_time DESC
+  </select>
+  <update id="updateExecutorResultId" parameterType="com.qding.bigdata.ds.model.MonitorJobQueue">
+    update ds_monitor_queue SET execute_result_id=#{executeResultId} WHERE id=#{id}
+  </update>
+</mapper>

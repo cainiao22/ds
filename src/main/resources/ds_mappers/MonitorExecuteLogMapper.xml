@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qding.bigdata.ds.dao.MonitorExecuteLogDao" >
+  <resultMap id="BaseResultMap" type="com.qding.bigdata.ds.model.MonitorExecuteLog" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="monitor_queue_id" property="monitorQueueId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="monitor_log" property="monitorLog" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, monitor_queue_id, create_time, monitor_log
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from ds_monitor_execute_log
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from ds_monitor_execute_log
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="save" parameterType="com.qding.bigdata.ds.model.MonitorExecuteLog" >
+    insert into ds_monitor_execute_log (id, monitor_queue_id, create_time,
+      monitor_log)
+    values (#{id,jdbcType=VARCHAR}, #{monitorQueueId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{monitorLog,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.qding.bigdata.ds.model.MonitorExecuteLog" >
+    insert into ds_monitor_execute_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="monitorQueueId != null" >
+        monitor_queue_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="monitorLog != null" >
+        monitor_log,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="monitorQueueId != null" >
+        #{monitorQueueId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="monitorLog != null" >
+        #{monitorLog,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.qding.bigdata.ds.model.MonitorExecuteLog" >
+    update ds_monitor_execute_log
+    <set >
+      <if test="monitorQueueId != null" >
+        monitor_queue_id = #{monitorQueueId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="monitorLog != null" >
+        monitor_log = #{monitorLog,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.qding.bigdata.ds.model.MonitorExecuteLog" >
+    update ds_monitor_execute_log
+    set monitor_queue_id = #{monitorQueueId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      monitor_log = #{monitorLog,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="getMonitorExecuteLogByQueueId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List"/>
+    FROM ds_monitor_execute_log WHERE monitor_queue_id=#{monitorQueueId}
+    ORDER by create_time
+  </select>
+</mapper>

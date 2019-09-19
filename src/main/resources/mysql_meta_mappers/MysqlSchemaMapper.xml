@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qding.bigdata.ds.mysqlmeta.dao.MysqlSchemaDao" >
+  <resultMap id="BaseResultMap" type="com.qding.bigdata.ds.model.mysqlMeta.MysqlSchema" >
+    <result column="CATALOG_NAME" property="catalogName" jdbcType="VARCHAR" />
+    <result column="SCHEMA_NAME" property="schemaName" jdbcType="VARCHAR" />
+    <result column="DEFAULT_CHARACTER_SET_NAME" property="defaultCharacterSetName" jdbcType="VARCHAR" />
+    <result column="DEFAULT_COLLATION_NAME" property="defaultCollationName" jdbcType="VARCHAR" />
+    <result column="SQL_PATH" property="sqlPath" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="getAllDbs" resultType="java.lang.String">
+    select SCHEMA_NAME from information_schema.SCHEMATA
+  </select>
+</mapper>

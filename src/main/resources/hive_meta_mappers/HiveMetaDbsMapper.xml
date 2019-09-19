@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qding.bigdata.ds.hivemeta.dao.HiveMetaDbsDao" >
+  <resultMap id="BaseResultMap" type="com.qding.bigdata.ds.model.hiveMeta.HiveMetaDbs" >
+    <id column="DB_ID" property="dbId" jdbcType="BIGINT" />
+    <result column="DESC" property="desc" jdbcType="VARCHAR" />
+    <result column="DB_LOCATION_URI" property="dbLocationUri" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="OWNER_NAME" property="ownerName" jdbcType="VARCHAR" />
+    <result column="OWNER_TYPE" property="ownerType" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    DB_ID, `DESC`, DB_LOCATION_URI, `NAME`, OWNER_NAME, OWNER_TYPE
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from DBS
+    where DB_ID = #{dbId,jdbcType=BIGINT}
+  </select>
+  <select id="getAllDbs" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from DBS
+  </select>
+  <select id="getDbByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List" />
+    from DBS WHERE `name`=#{name}
+  </select>
+</mapper>

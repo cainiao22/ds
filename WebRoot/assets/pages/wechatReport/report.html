@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>财务报表</title>
+  </head>
+  <script>
+      document.documentElement.style.fontSize = document.documentElement.clientWidth / 3.75 + 'px'
+      window.onresize = function () {
+        document.documentElement.style.fontSize = document.documentElement.clientWidth / 3.75 + 'px'
+      }
+  </script>
+    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="./css/report.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./css/iconfont.css">
+    <script src="./zepto.js"></script>
+    <script src="./echarts.js"></script>
+  <body>
+
+      <div class="box">
+            <!-- 头部 -->
+             <!-- <header>
+                <a><img src="./iconfont/iconimg/return.png" alt="" class="return">返回</a>
+                <span class="report">财务日报</span>
+                <a><img src="./iconfont/iconimg/more.png" alt="" class="more"></a>
+            </header> -->
+
+            <!-- 主题部分 -->
+            <div class="main">
+                <!-- 截止昨日 -->
+                <div class="yesterday">
+                    <div><span>截止昨日 </span><span class="time"></span></div>
+                    <div>当年累计</div>
+                </div>
+                <!-- 数据展示 -->
+                <div class="dataList">
+                    <div><span>GMV</span><span><i id="gmv"></i>元</span></div>
+                    <div><span>收入</span><span><i id="shouru"></i>元</span></div>
+                    <div><span>毛利</span><span><i id="maoli"></i>元</span></div>
+                    <div><span>订单量</span><span><i id="order_num"></i>单</span></div>
+                </div>
+                <div class="newDayUp">
+                    <div><span>日新增 </span><span class="time"></span></div>               
+                    <div><span><img src="iconfont/iconimg/dayUp.png" alt="" class="dayUp"></span><span>环比增长</span></div>
+                </div>
+                <div class="newDayUpData">
+                    <div class="newday1">
+                        <a href="#dbar">
+                            <p><span class="price"><em id="gmv1"></em><i>元</i></span><i class="active" id="gmv_huanbi1"></i></p>
+                            <p class="btm"><span>GMV</span><em><img src="iconfont/iconimg/mores.png" alt=""></em></p>
+                        </a> 
+                    </div>
+                    <div class="newday2">
+                        <a href="#dbar">
+                            <p><span class="price"><em id="shouru1"></em><i>元</i></span><i class="active" id="shouru_huanbi1"></i></p>
+                            <p class="btm"><span>收入</span><em><img src="iconfont/iconimg/mores.png" alt=""></em></p>
+                        </a> 
+                    </div>
+                    <div class="newday3">
+                        <a href="#dbar">
+                            <p><span class="price"><em id="maoli1"></em><i>元</i></span><i class="active" id="maoli_huanbi1"></i></p>
+                            <p class="btm"><span>毛利</span><em><img src="iconfont/iconimg/mores.png" alt=""></em></p>
+                        </a>
+                    </div>
+                    <div class="newday4">
+                        <a href="#dbar">
+                            <p><span class="price"><em id="order_num1"></em><i>单</i></span><i class="active" id="order_num_huanbi1"></i></p>
+                            <p class="btm"><span>订单量</span><em><img src="iconfont/iconimg/mores.png" alt=""></em></p>
+                        </a>                    
+                    </div>         
+                </div>
+            </div>
+      </div>
+
+
+
+      <!-- 报表区域 -->
+        <div class="baobiao" id="dbar">
+            <div class="btn">
+              <span class="active">按业态</span>
+              <span>按城市</span>
+            </div>
+            <div class="title">
+                <h3></h3>
+                <h4></h4>
+                <div class="title-btn">
+                    <span><i class="show1"></i>元</span>
+                    <span><i class="show2"></i><em class="updown"></em><em class="iconfont icon-jiantouyou"></em></span>
+                </div>
+            </div>
+            <div class="canvas" id="main" style="width: 100%;height:5rem;"></div>
+        </div>
+  </body>
+</html>
+<script>
+function GetRequest() {  
+   var url = location.search; //获取url中"?"符后的字串  
+   var theRequest = new Object();  
+   if (url.indexOf("?") != -1) {  
+      var str = url.substr(1);  
+      strs = str.split("&");  
+      for(var i = 0; i < strs.length; i ++) {  
+         theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);  
+      }  
+   }  
+   return theRequest;  
+}  
+shujuxianshi()
+function shujuxianshi(){
+    //获取当天的时间
+        function getDate() {  
+            var date = new Date();    
+            date.setTime(date.getTime());
+            var mon = '';
+            if((date.getMonth()+1)<10) mon = '0' + (date.getMonth()+1);
+            time = date.getFullYear()+"-" + mon + "-" + (date.getDate() - 1); 
+            return time;    
+        }
+        var time = GetRequest().day?GetRequest().day:getDate();
+        $('.time').html(time);
+    //ajax
+        $.ajax({
+            type: 'GET',
+            url: 'http://devbigdata.qdingnet.com/ds/dataApiQuery/finance_ribao_summary',
+            dataType: 'json',
+            success: function(res){
+                // console.log(res)
+                // console.log(res.data[0])
+                $('#gmv').html(res.data[0].gmv)
+                $('#order_num').html(res.data[0].order_num)
+                $('#shouru').html(res.data[0].shouru)
+                $('#maoli').html(res.data[0].maoli)
+            },
+            error: function(xhr, GET){
+                alert('Ajax error!')
+            }
+        })
+
+        $.ajax({
+            type: 'GET',
+            url: 'http://devbigdata.qdingnet.com/ds//dataApiQuery/finance_ribao_daily_new',
+            data: {
+                day: time
+            },
+            dataType: 'json',
+            success: function(res){
+                // console.log(res);
+                $('#gmv1').html(res.data[0].gmv)
+                $('#order_num1').html(res.data[0].order_num)
+                $('#shouru1').html(res.data[0].shouru)
+                $('#maoli1').html(res.data[0].maoli)
+                // console.log(res)
+
+                $('#gmv_huanbi1').html(res.data[0].gmv_huanbi+'%')
+                $('#order_num_huanbi1').html(res.data[0].order_num_huanbi+'%')
+                $('#shouru_huanbi1').html(res.data[0].shouru_huanbi+'%')
+                $('#maoli_huanbi1').html(res.data[0].maoli_huanbi+'%')
+                dianji(res.data)
+                setbar(res.data[0].gmv, res.data[0].gmv_huanbi, 0);
+                judge(res.data)
+            },
+            error: function(xhr, GET){
+                alert('Ajax error!')
+            }
+        })
+
+    function dianji(res){
+        $('.newday1').on('click', function(){
+            setbar(res[0].gmv, res[0].gmv_huanbi, 0, 'yetai');
+        });
+        $('.newday2').on('click', function(){
+            setbar(res[0].shouru, res[0].shouru_huanbi, 1, 'yetai');
+        });
+        $('.newday3').on('click', function(){
+            setbar(res[0].maoli, res[0].maoli_huanbi, 2, 'yetai');
+        });
+        $('.newday4').on('click', function(){
+            setbar(res[0].order_num, res[0].order_num_huanbi, 3, 'yetai');
+        });
+    }
+}
+$('#gmv_huanbi1')
+
+
+function judge(res) {
+    if( res[0].gmv_huanbi/1 > 0 ) {
+        $('#gmv_huanbi1').css('color','red');
+        $('#gmv_huanbi1').addClass('up')
+    }else{
+        $('#gmv_huanbi1').css('color','green')
+        $('#gmv_huanbi1').addClass('down')
+    }
+
+   if( res[0].shouru_huanbi/1 > 0 ) {
+        $('#shouru_huanbi1').css('color','red')
+        $('#shouru_huanbi1').addClass('up')
+    }else{
+        $('#shouru_huanbi1').css('color','green')
+        $('#shouru_huanbi1').addClass('down')
+    }
+
+    if( res[0].maoli_huanbi/1 > 0 ) {
+        $('#maoli_huanbi1').css('color','red')
+        $('#maoli_huanbi1').addClass('up')
+    }else{
+        $('#maoli_huanbi1').css('color','green')
+        $('#maoli_huanbi1').addClass('down')
+    }
+
+    if( res[0].order_num_huanbi/1 > 0 ) {
+        $('#order_num_huanbi1').css('color','red')
+        $('#order_num_huanbi1').addClass('up')
+    }else{
+        $('#order_num_huanbi1').css('color','green')
+        $('#order_num_huanbi1').addClass('down')
+    }
+}
+function setbar(show1, show2, num, title){
+    var time1 = GetRequest().day?GetRequest().day:getDate()
+    $('.title h4').html(time1)
+    $('.show1').html(show1)
+    $('.show2').html(show2)
+    if(show2/1>0){
+        $('.show2').css('color', 'red');
+        $('.updown').addClass('iconfont icon-xiangshangjiantoucuxiao');
+        $('.updown').css('color', 'red');
+    }else{
+        $('.show2').css('color', 'green');
+        $('.updown').addClass('iconfont icon-jiantou');
+        $('.updown').css('color', 'green');
+    }
+    
+    
+    var myChart = echarts.init(document.getElementById('main'));
+    // 指定图表的配置项和数据
+    var option = {
+        tooltip : {
+            trigger: 'axis'
+        },
+        grid: {
+            bottom: '25%',
+            left: '15%',
+            right: '9%',
+            top: '7%'
+        },
+        dataZoom: {
+
+            // zoomLock: true
+        },
+        legend: {
+            data:[{
+                name:'',
+                "icon": "circle",
+                textStyle:{
+                    color:'#fff'
+                }
+            },
+            {
+                name:'',
+                "icon": "circle",
+                textStyle:{
+                    color:'#fff'
+                }
+            }],
+            align: 'left',
+            bottom: '13%',
+        },
+        xAxis : [
+            {
+                type : 'category',
+                data : [],
+                axisPointer: {
+                    type: 'shadow',
+                    shadowStyle: {
+                        color: 'rgba(6,19,30,.4)'
+                    }
+                },
+                axisLabel: {
+                    interval: 0,
+                    show: true,
+                    textStyle: {
+                        color: '#fff'
+                    }
+                }
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value',
+                name: '',
+                nameTextStyle:{
+                        color: '#fff'
+                    },
+                axisLabel: {
+                    show: true,
+                    textStyle: {
+                        color: '#fff',
+                        
+                    }
+                }
+            }
+        ],
+        series : [
+            {
+                name:'',
+                type:'bar',
+                barWidth : 15,
+                data:[],
+                itemStyle:{
+                    emphasis: {
+                        barBorderRadius: 30
+                    },
+                    normal:{
+                        color:'#277ace',
+                        barBorderRadius:[10, 10, 10, 10]
+                    }
+                }
+            },
+            {
+                name:'',
+                type:'bar',
+                barWidth : 15,
+                data:[],
+                itemStyle:{
+                    emphasis: {
+                        barBorderRadius: 30
+                    },
+                    normal:{
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                            offset: 0,
+                            color: '#00f7e4'
+                        }, {
+                            offset: 1,
+                            color: '#0082c8'
+                        }]),
+                        barBorderRadius:[10, 10, 10, 10]
+                    }
+                }
+            }
+        ]
+    };
+    var btn1 = $('.btn>span:nth-child(1)');
+    var btn2 = $('.btn>span:nth-child(2)');
+    btn1.addClass('active');
+    btn2.removeClass('active');
+    btn1.on('click',function(){
+        btn1.addClass('active');
+        btn2.removeClass('active');
+        getdata('finance_ribao_daily_yetai', num)
+    })
+    btn2.on('click',function(){
+        btn2.addClass('active');
+        btn1.removeClass('active');
+        getdata('finance_ribao_daily_city', num);
+    })
+    getdata('finance_ribao_daily_yetai',num);
+    function getDate() {  
+            var date = new Date();    
+            date.setTime(date.getTime());
+            var mon = '';
+            if((date.getMonth()+1)<10) mon = '0' + (date.getMonth()+1);
+            time = date.getFullYear()+"-" + mon + "-" + (date.getDate() - 1); 
+            return time;
+        }
+    function getdata(str,num){
+        //ajax
+        $.ajax({
+            type: 'GET',
+            url: 'http://devbigdata.qdingnet.com/ds/dataApiQuery/' + str,
+            data: {
+                day:time1
+            },
+            dataType: 'json',
+            success: function(res){
+                peizhi(res.data,num);
+            },
+            error: function(xhr, GET){
+                alert('Ajax error!')
+            }
+        })
+    }
+
+
+    function peizhi(res, num){
+        var arr1 = [];
+        var arr2 = [];
+        var arr3 = [];
+        var shuju = {
+            name: '单位：万元',
+            ming: 'GMV',
+            cheng: '收入'
+        };
+        var city = '业态';
+        if(res){
+            res.forEach(item => {
+                if(item.product_name){
+                    arr1.push(item.product_name);
+                    option.dataZoom = {};
+                }else if(item.region_name){
+                    var csm = '';
+                    if(item.region_name.length>2){
+                        csm = item.region_name.substr(0,item.region_name.length-1);
+                    }else{
+                        csm = item.region_name;
+                    }
+                    arr1.push(csm);
+                    city = '城市';
+                    option.dataZoom.show = true;
+                    option.dataZoom.start = 0;
+                    option.dataZoom.end = 60;
+                    option.dataZoom.maxSpan = 70;
+                }
+                switch(num){
+                    case 0:
+                        arr2.push(item.gmv);
+                        arr3.push(item.shouru);
+                        $('.title h3').html('平台业务GMV/收入'+city+'分布');
+                        break;
+                    case 1:
+                        arr2.push(item.shouru);
+                        arr3.push(item.maoli);
+                        shuju.ming = '收入';
+                        shuju.cheng = '毛利';
+                        $('.title h3').html('平台业务收入/毛利'+city+'分布');
+                        break;
+                    case 2:
+                        arr2.push(item.maoli);
+                        arr3.push(item.shouru);
+                        shuju.ming = '毛利';
+                        shuju.cheng = '收入';
+                        $('.title h3').html('平台业务毛利/收入'+city+'分布');
+                        break; 
+                    case 3: 
+                        arr2.push(item.order_num);
+                        arr3 = []
+                        shuju.name = '单位：单';
+                        shuju.ming = '订单数';
+                        shuju.cheng = '';
+                        option.series[0].barWidth = '25';
+                        option.series[1] = {};
+                        $('.title h3').html('平台业务订单'+city+'分布');
+                        break;  
+                    default:
+                        break; 
+                }
+            })
+        }
+        option.legend.data[0].name = shuju.ming;
+        option.legend.data[1].name = shuju.cheng;
+        option.xAxis[0].data = arr1;
+        option.yAxis[0].name = shuju.name;
+        option.series[0].name = shuju.ming;
+        option.series[0].data = arr2;
+        option.series[1].name = shuju.cheng;
+        option.series[1].data = arr3;
+        setTimeout(xuanran, 400);
+    }
+
+    function xuanran(){
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    }
+    window.onresize = myChart.resize;
+}
+ 
+
+
+</script>
+

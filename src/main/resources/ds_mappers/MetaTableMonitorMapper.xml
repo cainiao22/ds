@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qding.bigdata.ds.dao.MetaTableMonitorDao">
+    <resultMap id="BaseResultMap" type="com.qding.bigdata.ds.model.MetaTableMonitor">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="meta_table_id" jdbcType="VARCHAR" property="metaTableId"/>
+        <result column="monitor_sql" jdbcType="VARCHAR" property="monitorSql"/>
+        <result column="value_min" jdbcType="NUMERIC" property="valueMin"/>
+        <result column="value_max" jdbcType="NUMERIC" property="valueMax"/>
+        <result column="enable_monitor" jdbcType="INTEGER" property="enableMonitor"/>
+        <result column="monitorjob_schedule_hour" jdbcType="INTEGER" property="monitorjobScheduleHour"/>
+        <result column="monitorjob_schedule_minute" jdbcType="INTEGER" property="monitorjobScheduleMinute"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="priority" jdbcType="INTEGER" property="priority"/>
+        <result column="monitor_name" jdbcType="VARCHAR" property="monitorName"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, meta_table_id, monitor_sql, value_min, value_max, enable_monitor, monitorjob_schedule_hour, 
+    monitorjob_schedule_minute, create_time, update_time, priority, monitor_name
+  </sql>
+    <sql id="table_name">
+    ds_meta_table_monitor
+  </sql>
+    <sql id="where_condition">
+        <trim prefix=" where " suffixOverrides="and">
+            <if test="id != null">
+                id = #{id} and
+            </if>
+        </trim>
+    </sql>
+    <select id="getListByMetaTableId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        <include refid="table_name"/>
+        WHERE meta_table_id=#{metaTableId}
+			order by  update_time desc 
+		
+    </select>
+    
+    <insert id="save" parameterType="MetaTableMonitor">
+        insert into <include refid="table_name"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="metaTableId != null">
+                meta_table_id,
+            </if>
+            <if test="monitorSql != null">
+                monitor_sql,
+            </if>
+            <if test="valueMin != null ">
+                value_min,
+            </if>
+            <if test="valueMax != null">
+                value_max,
+            </if>
+            <if test="enableMonitor != null">
+                enable_monitor,
+            </if>
+            <if test="monitorjobScheduleHour != null">
+                monitorjob_schedule_hour,
+            </if>
+            <if test="monitorjobScheduleMinute != null">
+                monitorjob_schedule_minute,
+            </if>
+            <if test="priority != null">
+                priority,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="monitorName != null">
+                monitor_name,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="metaTableId != null">
+                #{metaTableId},
+            </if>
+            <if test="monitorSql != null">
+                #{monitorSql},
+            </if>
+            <if test="valueMin != null ">
+                #{valueMin},
+            </if>
+            <if test="valueMax != null">
+                #{valueMax},
+            </if>
+            <if test="enableMonitor != null">
+                #{enableMonitor},
+            </if>
+            <if test="monitorjobScheduleHour != null">
+                #{monitorjobScheduleHour},
+            </if>
+            <if test="monitorjobScheduleMinute != null">
+                #{monitorjobScheduleMinute},
+            </if>
+            <if test="priority != null">
+                #{priority},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+            <if test="monitorName != null">
+                #{monitorName},
+            </if>
+        </trim>
+    </insert>
+    <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        <include refid="table_name"/>
+        where id=#{id} limit 1
+    </select>
+
+    <update id="updateById" parameterType="MetaTableMonitor">
+    update <include refid="table_name"/>
+    <set>
+        <if test="metaTableId != null">
+            meta_table_id=#{metaTableId},
+        </if>
+        <if test="monitorSql != null">
+            monitor_sql=#{monitorSql},
+        </if>
+        <if test="valueMin != null ">
+            value_min=#{valueMin},
+        </if>
+        <if test="valueMax != null">
+            value_max=#{valueMax},
+        </if>
+        <if test="enableMonitor != null">
+            enable_monitor=#{enableMonitor},
+        </if>
+        <if test="monitorjobScheduleHour != null">
+            monitorjob_schedule_hour=#{monitorjobScheduleHour},
+        </if>
+        <if test="monitorjobScheduleMinute != null">
+            monitorjob_schedule_minute=#{monitorjobScheduleMinute},
+        </if>
+        <if test="priority != null">
+            priority=#{priority},
+        </if>
+        <if test="createTime != null">
+            create_time=#{createTime},
+        </if>
+        <if test="updateTime != null">
+            update_time=#{updateTime},
+        </if>
+        <if test="monitorName != null">
+            monitor_name=#{monitorName},
+        </if>
+    </set>
+        WHERE id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="MetaTableMonitor">
+        delete from <include refid="table_name"/>
+        <include refid="where_condition" />
+    </delete>
+</mapper>

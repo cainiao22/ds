@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qding.bigdata.ds.scheduler.dao.SchedulerDao">
+	<resultMap id="BaseResultMap" type="SchedulerJob">
+		<result column="id" property="jobId" />
+
+		<result column="job_group" property="jobGroup" />
+		<result column="job_cron" property="jobCron" />
+		<result column="job_desc" property="jobDesc" />
+
+		<result column="add_time" property="addTime" />
+		<result column="update_time" property="updateTime" />
+
+		<result column="author" property="author" />
+		<result column="alarm_email" property="alarmEmail" />
+
+		<result column="executor_route_strategy" property="executorRouteStrategy" />
+		<result column="executor_handler" property="executorHandler" />
+		<result column="executor_param" property="executorParam" />
+		<result column="executor_block_strategy" property="executorBlockStrategy" />
+		<result column="executor_fail_strategy" property="executorFailStrategy" />
+
+		<result column="glue_type" property="glueType" />
+		<result column="glue_source" property="glueSource" />
+		<result column="glue_remark" property="glueRemark" />
+		<result column="glue_updatetime" property="glueUpdatetime" />
+
+		<result column="parent_jobkey" property="parentJobKey" />
+		<result column="job_name" property="jobName" />
+		<result column="job_type" property="jobType" />
+		<result column="create_time" property="createTime" />
+		<result column="schd_status" property="schdStatus" />
+		<result column="schd_period" property="schdPeriod" />
+		<result column="cron_cofig" property="cronCofig" />
+		<result column="parent_jobkey" property="dependency" />
+
+
+
+	</resultMap>
+
+	<sql id="base_column_list"> *
+	</sql>
+	<sql id="where_condition">
+		<trim prefix=" where " suffixOverrides="and">
+			<if test="jobId != null">
+				id = #{jobId} and
+			</if>
+	<if test="keyword != null">
+				(job_name like '%${keyword}%'  or job_desc
+				like '%${keyword}%' ) and
+			</if>
+			<if test="jobType != null and jobType!=''">
+				job_type = #{jobType} and
+			</if>
+			<if test="author!= null and author!=''">
+				author= #{author} and
+			</if>
+
+
+		</trim>
+	</sql>
+	<sql id="limitAndOrderBy">
+		<if test="sortAndDesc != null">
+			order by ${sortAndDesc}
+		</if>
+		limit #{pageCount} offset #{offset}
+	</sql>
+	<select id="list" resultMap="BaseResultMap" parameterType="SchedulerJob">
+		select
+		<include refid="base_column_list" />
+		from XXL_JOB_QRTZ_TRIGGER_INFO
+		<include refid="where_condition" />
+		<include refid="limitAndOrderBy" />
+	</select>
+	<select id="count" resultType="Integer" parameterType="SchedulerJob">
+		select count(1)
+		from XXL_JOB_QRTZ_TRIGGER_INFO
+		<include refid="where_condition" />
+	</select>
+	<select id="getById" resultMap="BaseResultMap" parameterType="SchedulerJob">
+		select
+		<include refid="base_column_list" />
+		from XXL_JOB_QRTZ_TRIGGER_INFO
+		where id=#{jobId} limit 1
+	</select>
+<update id="updateById" parameterType="SchedulerJob">
+		update XXL_JOB_QRTZ_TRIGGER_INFO
+		<set>
+		
+			<if test="jobGroup != null">
+				job_group =#{jobGroup},
+			</if>
+			 
+			<if test="jobCron != null">
+				job_cron =#{jobCron}, 
+			</if>
+			 
+
+			<if test="jobDesc != null">
+				job_desc = #{jobDesc},
+			</if>
+			 
+			 
+			 
+			<if test="updateTime != null">
+				update_time =#{updateTime},
+			</if>
+			 
+			<if test="author != null">
+				author =#{author},
+			</if>
+			 
+			<if test="alarmEmail != null">
+				alarm_email =#{alarmEmail},
+			</if>
+ 
+			<if test="executorRouteStrategy != null">
+				executor_route_strategy =#{executorRouteStrategy},
+			</if>
+			 
+			<if test="executorHandler != null">
+				executor_handler = #{executorHandler},
+			</if>
+			 
+			<if test="executorParam != null">
+				executor_param =#{executorParam},
+			</if>
+			 
+			<if test="executorBlockStrategy != null">
+				executor_block_strategy =	#{executorBlockStrategy},
+			</if>
+			 
+			<if test="executorFailStrategy != null">
+				executor_fail_strategy = #{executorFailStrategy},
+			</if>
+		 
+			 
+			<if test="glueType != null">
+				glue_type =#{glueType},
+			</if>
+			 
+			<if test="glueSource != null">
+				glue_source =#{glueSource},
+			</if>
+			 
+			<if test="glueRemark != null">
+				glue_remark = #{glueRemark},
+			</if>
+			 
+			<if test="updateTime != null">
+				glue_updatetime = #{updateTime},
+			</if>
+			 
+			<if test="parentJobKey != null">
+				parent_jobkey = #{parentJobKey},
+			</if>
+			 
+			<if test="jobName != null">
+				job_name = #{jobName},
+			</if>
+			 
+			<if test="jobType != null">
+				job_type = #{jobType},
+			</if>
+			
+				<if test="createTime != null">
+				create_time = #{createTime},
+			</if>
+				<if test="schdStatus != null">
+				schd_status = #{schdStatus},
+			</if>
+				<if test="schdPeriod != null">
+				schd_period =#{schdPeriod},
+			</if>
+				<if test="cronCofig != null">
+				cron_cofig =#{cronCofig},
+			</if>
+			
+			
+		</set>
+		where id = #{jobId}
+	</update>
+<insert id="save" parameterType="SchedulerJob" useGeneratedKeys="true" keyProperty="jobId" >
+		INSERT INTO XXL_JOB_QRTZ_TRIGGER_INFO (
+			job_group,
+			job_cron,
+			job_desc,
+			add_time,
+			update_time,
+			author,
+			alarm_email,
+            executor_route_strategy,
+			executor_handler,
+			executor_param,
+			executor_block_strategy,
+			executor_fail_strategy,
+			glue_type,
+			glue_source,
+			glue_remark,
+			glue_updatetime,
+			parent_jobkey,
+			job_name,
+			job_type,
+			create_time,
+			schd_status,
+			schd_period,
+			cron_cofig
+			
+				
+			
+		) VALUES (
+			#{jobGroup},
+			#{jobCron}, 
+			#{jobDesc},
+			#{createTime},
+			#{updateTime},
+			#{author},
+			#{alarmEmail},
+			#{executorRouteStrategy},
+			#{executorHandler},
+			#{executorParam},
+			#{executorBlockStrategy},
+			#{executorFailStrategy},
+			#{glueType},
+			#{glueSource},
+			#{glueRemark},
+			#{createTime},
+			#{parentJobKey},
+			#{jobName},
+			#{jobType},
+			#{createTime},
+			#{schdStatus},
+			#{schdPeriod},
+			#{cronCofig}
+		);
+	</insert>
+	<delete id="delete"  parameterType="SchedulerJob">
+    delete from XXL_JOB_QRTZ_TRIGGER_INFO
+    where id = #{jobId}
+  </delete>
+  <insert id="saveDependency" parameterType="SchedulerJob" >
+  insert into job_dependency(job_id,dependency_job_id)values(#{jobId},#{dependencyJobId});
+  </insert>
+  <delete id="deleteDependency"  parameterType="SchedulerJob">
+    delete from job_dependency
+    where job_id = #{jobId}
+  </delete>
+	<select id="getchildrenJobs" parameterType="SchedulerJob" resultMap="BaseResultMap">
+		SELECT * FROM XXL_JOB_QRTZ_TRIGGER_INFO WHERE parent_jobkey='${jobGroup}_${jobId}'
+			OR parent_jobkey LIKE '%,${jobGroup}_${jobId},%'
+			OR parent_jobkey LIKE '%,${jobGroup}_${jobId}'
+			OR parent_jobkey LIKE '${jobGroup}_${jobId},%'
+	</select>
+</mapper>
